@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explosão TV</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --vermelho:#CC1A1A;
+  --vermelho-esc:#A01212;
+  --azul:#003DA5;
+  --azul-vivo:#0056D6;
+  --amarelo:#FFD600;
+  --verde:#00A651;
+  --roxo:#7C3AED;
+  --cinza:#4A5568;
+  --bg:#0A0A0A;
+  --surface:#111111;
+  --surface2:#1A1A1A;
+  --text:#FFFFFF;
+  --text2:#BBBBBB;
+  --accent:var(--vermelho);
+  --accent2:var(--azul-vivo);
+  --header-h:72px;
+  --ticker-h:52px;
+  --sidebar-w:320px;
+}
+html,body{
+  width:100%;height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  overflow:hidden;
+  user-select:none;
+}
+
+/* ── HEADER ───────────────────────────────────────────────── */
+#header{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--header-h);
+  background:linear-gradient(90deg,var(--vermelho-esc) 0%,var(--vermelho) 40%,var(--azul) 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.5);
+}
+/* #header-logo removido — logo agora é texto estilizado #header-brand */
+#header-empresa{
+  font-size:22px;font-weight:700;letter-spacing:.5px;
+}
+#header-clock{
+  font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;
+  letter-spacing:1px;
+  text-align:right;
+}
+#header-date{
+  font-size:13px;opacity:.85;text-align:right;margin-top:1px;
+}
+
+/* ── LAYOUT PRINCIPAL ─────────────────────────────────────── */
+#main{
+  position:fixed;
+  top:var(--header-h);
+  left:0;right:0;
+  bottom:var(--ticker-h);
+  display:flex;
+  gap:0;
+}
+
+/* ── ÁREA DOS SLIDES ──────────────────────────────────────── */
+#slides-area{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  background:var(--bg);
+}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 60px;
+  opacity:0;
+  transition:opacity .6s ease;
+  pointer-events:none;
+}
+.slide.active{
+  opacity:1;
+  pointer-events:auto;
+}
+.slide-label{
+  font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:5px 14px;border-radius:4px;
+  margin-bottom:20px;
+  opacity:.9;
+}
+.slide-titulo{
+  font-size:52px;font-weight:800;line-height:1.15;
+  text-align:center;
+  text-shadow:0 2px 12px rgba(0,0,0,.4);
+  max-width:900px;
+}
+.slide-texto{
+  font-size:28px;font-weight:400;line-height:1.5;
+  text-align:center;
+  opacity:.88;
+  max-width:860px;
+  margin-top:16px;
+}
+/* Cores por tipo */
+.tipo-aviso   .slide-label{background:#CC1A1A;color:#fff}
+.tipo-aviso   .slide-titulo{color:#fff}
+.tipo-info    .slide-label{background:#0070F3;color:#fff}
+.tipo-info    .slide-titulo{color:#E8F0FF}
+.tipo-conquista .slide-label{background:#FFD600;color:#111}
+.tipo-conquista .slide-titulo{color:#FFD600}
+.tipo-meta    .slide-label{background:#00A651;color:#fff}
+.tipo-meta    .slide-titulo{color:#A8F0C6}
+.tipo-livre   .slide-label{background:#7C3AED;color:#fff}
+.tipo-livre   .slide-titulo{color:#DDD6FF}
+.tipo-imagem  {background:#000;}
+
+/* Progress bar do slide */
+#slide-progress{
+  position:absolute;bottom:0;left:0;right:0;
+  height:4px;background:rgba(255,255,255,.12);
+}
+#slide-progress-bar{
+  height:100%;
+  background:var(--vermelho);
+  width:0%;
+  transition:width linear;
+}
+/* Indicadores de slide */
+#slide-dots{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  display:flex;gap:8px;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  transition:background .3s;
+}
+.dot.active{background:var(--vermelho);}
+
+/* Slide especial: dias sem acidentes */
+.slide-acidentes{
+  background:linear-gradient(135deg,#003300 0%,#005500 100%);
+}
+.acidentes-num{
+  font-size:140px;font-weight:900;line-height:1;
+  color:#00FF66;
+  text-shadow:0 0 60px rgba(0,255,102,.4);
+}
+.acidentes-label{
+  font-size:26px;font-weight:700;letter-spacing:2px;
+  color:#A8F0C6;margin-top:8px;
+}
+
+/* Slide vazio */
+.slide-empty{
+  background:var(--surface);
+}
+.slide-empty-icon{font-size:80px;margin-bottom:16px;opacity:.4}
+.slide-empty-txt{font-size:22px;opacity:.35}
+
+/* ── SIDEBAR ──────────────────────────────────────────────── */
+#sidebar{
+  width:var(--sidebar-w);
+  background:var(--surface);
+  border-left:1px solid rgba(255,255,255,.07);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.sidebar-block{
+  padding:16px 18px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  flex-shrink:0;
+}
+.sidebar-title{
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--azul-vivo);margin-bottom:10px;
+}
+
+/* Clima */
+#clima-wrap{
+  display:flex;align-items:center;gap:14px;
+}
+#clima-icon{font-size:44px;line-height:1}
+#clima-info{}
+#clima-temp{font-size:34px;font-weight:800;line-height:1}
+#clima-desc{font-size:13px;color:var(--text2);margin-top:2px}
+#clima-extra{font-size:12px;color:var(--text2);margin-top:3px}
+#clima-local{font-size:11px;opacity:.5;margin-top:3px}
+
+/* Dias sem acidentes mini */
+#acidentes-mini{
+  display:flex;align-items:center;gap:12px;
+}
+#acidentes-num-mini{
+  font-size:40px;font-weight:900;color:#00FF66;line-height:1;
+}
+#acidentes-label-mini{font-size:12px;color:var(--text2);line-height:1.4}
+
+/* Aniversariantes */
+#aniversariantes-list{
+  display:flex;flex-direction:column;gap:7px;
+  max-height:200px;overflow:hidden;
+}
+.aniv-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;
+}
+.aniv-data{
+  font-size:12px;font-weight:700;
+  background:var(--vermelho);color:#fff;
+  border-radius:4px;padding:2px 6px;
+  min-width:36px;text-align:center;
+  flex-shrink:0;
+}
+.aniv-nome{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aniv-setor{font-size:11px;color:var(--text2);flex-shrink:0}
+
+/* Próximos eventos */
+#eventos-list{
+  display:flex;flex-direction:column;gap:6px;
+  max-height:160px;overflow:hidden;
+}
+.ev-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:12px;
+}
+.ev-data{
+  font-size:11px;font-weight:700;
+  background:var(--azul);color:#fff;
+  border-radius:4px;padding:2px 5px;
+  flex-shrink:0;white-space:nowrap;
+}
+.ev-titulo{line-height:1.3;opacity:.9}
+
+/* ── TICKER ───────────────────────────────────────────────── */
+#ticker{
+  position:fixed;bottom:0;left:0;right:0;
+  height:var(--ticker-h);
+  background:rgba(10,10,10,.98);
+  border-top:2px solid var(--vermelho);
+  display:flex;align-items:center;
+  overflow:hidden;
+  z-index:100;
+}
+#ticker-label{
+  flex-shrink:0;
+  background:var(--vermelho);
+  color:#fff;
+  font-size:13px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:0 20px;height:100%;
+  display:flex;align-items:center;
+  white-space:nowrap;
+}
+#ticker-track{
+  flex:1;overflow:hidden;position:relative;height:100%;
+}
+#ticker-inner{
+  position:absolute;top:50%;transform:translateY(-50%);
+  white-space:nowrap;
+  font-size:17px;
+  animation:ticker-scroll 0s linear infinite;
+  padding-left:60px;
+}
+@keyframes ticker-scroll{
+  from{transform:translateY(-50%) translateX(0)}
+  to{transform:translateY(-50%) translateX(var(--tx,-100%))}
+}
+.ticker-sep{
+  display:inline-block;
+  margin:0 30px;
+  color:var(--vermelho);
+  font-weight:700;
+}
+
+/* ── LOADER ───────────────────────────────────────────────── */
+#loader{
+  position:fixed;inset:0;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;z-index:999;
+  transition:opacity .5s;
+}
+#loader.hide{opacity:0;pointer-events:none}
+.loader-spinner{
+  width:48px;height:48px;
+  border:4px solid rgba(204,26,26,.2);
+  border-top-color:var(--vermelho);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-txt{font-size:15px;opacity:.5}
+
+/* ── LOGO TEXTUAL ─────────────────────────────────────────── */
+#header-brand{
+  display:flex;align-items:baseline;gap:3px;
+  flex-shrink:0;
+}
+#header-logo-text{
+  font-size:26px;font-weight:900;
+  color:#fff;letter-spacing:-0.5px;
+  text-shadow:0 1px 4px rgba(0,0,0,.35);
+}
+#header-logo-tv{
+  font-size:22px;font-weight:800;
+  color:var(--amarelo);letter-spacing:1px;
+  text-shadow:0 1px 4px rgba(0,0,0,.35);
+}
+
+/* ── TIPO IMAGEM ──────────────────────────────────────────── */
+.tipo-imagem{
+  padding:0;
+  background:#000;
+}
+.slide-imagem-img{
+  width:100%;height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* Offline badge */
+#offline-badge{
+  display:none;
+  position:fixed;top:80px;right:16px;
+  background:#CC1A1A;color:#fff;
+  font-size:12px;font-weight:700;
+  padding:5px 12px;border-radius:4px;
+  z-index:200;
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-spinner"></div>
+  <div class="loader-txt">Carregando Explosão TV…</div>
+</div>
+
+<div id="offline-badge">📡 Sem conexão</div>
+
+<!-- ── HEADER ── -->
+<div id="header">
+  <div id="header-brand">
+    <span id="header-logo-text">Explosão</span><span id="header-logo-tv">TV</span>
+  </div>
+  <div id="header-empresa" style="display:none"></div>
+  <div>
+    <div id="header-clock">00:00:00</div>
+    <div id="header-date">Segunda-feira, 01 de Janeiro de 2025</div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div id="main">
+  <!-- SLIDES -->
+  <div id="slides-area">
+    <div id="slide-progress"><div id="slide-progress-bar"></div></div>
+    <div id="slide-dots"></div>
+    <!-- slides gerados via JS -->
+  </div>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <!-- Clima -->
+    <div class="sidebar-block">
+      <div class="sidebar-title">🌤 Clima — Trindade GO</div>
+      <div id="clima-wrap">
+        <div id="clima-icon">🌡</div>
+        <div id="clima-info">
+          <div id="clima-temp">--°C</div>
+          <div id="clima-desc">Carregando…</div>
+          <div id="clima-extra"></div>
+          <div id="clima-local">Trindade, Goiás</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dias sem acidentes -->
+    <div class="sidebar-block">
+      <div class="sidebar-title">🦺 Segurança</div>
+      <div id="acidentes-mini">
+        <div id="acidentes-num-mini">0</div>
+        <div id="acidentes-label-mini">dias sem<br>acidentes de trabalho</div>
+      </div>
+    </div>
+
+    <!-- Aniversariantes do mês -->
+    <div class="sidebar-block" id="aniv-block">
+      <div class="sidebar-title">🎂 Aniversários do Mês</div>
+      <div id="aniversariantes-list">
+        <div style="font-size:13px;opacity:.4">Nenhum este mês</div>
+      </div>
+    </div>
+
+    <!-- Próximos eventos -->
+    <div class="sidebar-block" id="eventos-block">
+      <div class="sidebar-title">📅 Próximos Eventos</div>
+      <div id="eventos-list">
+        <div style="font-size:13px;opacity:.4">Nenhum evento</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TICKER ── -->
+<div id="ticker">
+  <div id="ticker-label">📢 Avisos</div>
+  <div id="ticker-track">
+    <div id="ticker-inner">Carregando avisos…</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  CONFIGURAÇÃO
+// ═══════════════════════════════════════════════════
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
+var TV_URL     = SCRIPT_URL + '?action=getTVData';
+var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
+
+var SLIDE_DURATION = 10000;  // ms por slide
+var UPDATE_INTERVAL= 60000;  // 1 min — atualização silenciosa
+var RELOAD_HOUR    = 4;      // 4h da manhã — recarrega a página
+
+// ═══════════════════════════════════════════════════
+//  ESTADO
+// ═══════════════════════════════════════════════════
+var TV = { slides:[], recados:[], config:{}, eventos:[], aniversariantes:[] };
+var slideIdx    = 0;
+var slideTimer  = null;
+var progressTimer= null;
+var progressStart= 0;
+var climaCache  = null;
+var climaTs     = 0;
+var diasSemAcidente = 0;
+
+// ═══════════════════════════════════════════════════
+//  RELÓGIO
+// ═══════════════════════════════════════════════════
+(function relogio(){
+  var DIAS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  var MESES= ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  function tick(){
+    var n = new Date();
+    var h = String(n.getHours()).padStart(2,'0');
+    var m = String(n.getMinutes()).padStart(2,'0');
+    var s = String(n.getSeconds()).padStart(2,'0');
+    document.getElementById('header-clock').textContent = h+':'+m+':'+s;
+    document.getElementById('header-date').textContent  =
+      DIAS[n.getDay()]+', '+n.getDate()+' de '+MESES[n.getMonth()]+' de '+n.getFullYear();
+    // Reload às 4h da manhã
+    if(n.getHours()===RELOAD_HOUR && n.getMinutes()===0 && n.getSeconds()<5) location.reload();
+    setTimeout(tick,1000);
+  }
+  tick();
+})();
+
+// ═══════════════════════════════════════════════════
+//  CLIMA — Open-Meteo (sem chave de API)
+// ═══════════════════════════════════════════════════
+var WMO_ICONS = {
+  0:'☀️',1:'🌤',2:'⛅',3:'☁️',
+  45:'🌫',48:'🌫',
+  51:'🌦',53:'🌦',55:'🌧',
+  61:'🌧',63:'🌧',65:'🌧',
+  80:'🌦',81:'🌧',82:'⛈',
+  95:'⛈',96:'⛈',99:'⛈'
+};
+var WMO_DESC = {
+  0:'Céu limpo',1:'Poucas nuvens',2:'Parcialmente nublado',3:'Nublado',
+  45:'Névoa',48:'Névoa com geada',
+  51:'Chuvisco fraco',53:'Chuvisco',55:'Chuvisco forte',
+  61:'Chuva fraca',63:'Chuva moderada',65:'Chuva forte',
+  80:'Pancadas de chuva',81:'Chuva',82:'Chuva forte',
+  95:'Trovoada',96:'Trovoada com granizo',99:'Trovoada intensa'
+};
+function buscarClima(){
+  // Atualiza clima a cada 15 min
+  var agora = Date.now();
+  if(climaCache && agora - climaTs < 15*60*1000){ renderClima(climaCache); return; }
+  fetch(WEATHER_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var c = d.current;
+      climaCache = { temp: Math.round(c.temperature_2m), code: c.weathercode, hum: c.relative_humidity_2m, wind: Math.round(c.wind_speed_10m) };
+      climaTs = Date.now();
+      renderClima(climaCache);
+    })
+    .catch(function(){ /* mantém o último dado */ });
+}
+function renderClima(c){
+  document.getElementById('clima-icon').textContent = WMO_ICONS[c.code]||'🌡';
+  document.getElementById('clima-temp').textContent = c.temp+'°C';
+  document.getElementById('clima-desc').textContent = WMO_DESC[c.code]||'';
+  document.getElementById('clima-extra').textContent= '💧'+c.hum+'%  💨'+c.wind+' km/h';
+}
+
+// ═══════════════════════════════════════════════════
+//  DADOS TV
+// ═══════════════════════════════════════════════════
+function buscarDadosTV(){
+  fetch(TV_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d.ok) return;
+      var mudouSlides = JSON.stringify(d.slides)   !== JSON.stringify(TV.slides);
+      var mudouRecados= JSON.stringify(d.recados)  !== JSON.stringify(TV.recados);
+      var mudouAniv   = JSON.stringify(d.aniversariantes) !== JSON.stringify(TV.aniversariantes);
+      var mudouEv     = JSON.stringify(d.eventos)  !== JSON.stringify(TV.eventos);
+
+      TV.slides        = d.slides        || [];
+      TV.recados       = d.recados       || [];
+      TV.config        = d.config        || {};
+      TV.eventos       = d.eventos       || [];
+      TV.aniversariantes= d.aniversariantes || [];
+
+      // Aplica configurações
+      if(TV.config.nomeEmpresa)
+        document.getElementById('header-empresa').textContent = TV.config.nomeEmpresa;
+      if(TV.config.diasSemAcidente){
+        diasSemAcidente = parseInt(TV.config.diasSemAcidente)||0;
+        renderAcidentes();
+      }
+
+      // Re-renderiza só o que mudou (sem piscar a tela inteira)
+      if(mudouSlides)  renderSlides();
+      if(mudouRecados) renderTicker();
+      if(mudouAniv)    renderAniversariantes();
+      if(mudouEv)      renderEventos();
+
+      document.getElementById('offline-badge').style.display='none';
+      esconderLoader();
+    })
+    .catch(function(){
+      document.getElementById('offline-badge').style.display='block';
+      esconderLoader();
+    });
+}
+
+// ═══════════════════════════════════════════════════
+//  SLIDES
+// ═══════════════════════════════════════════════════
+function renderSlides(){
+  var area = document.getElementById('slides-area');
+  // Remove slides antigos (mantém progress e dots)
+  Array.from(area.querySelectorAll('.slide')).forEach(function(el){ el.remove(); });
+
+  var lista = TV.slides.slice().sort(function(a,b){ return (parseInt(a.ordem)||0)-(parseInt(b.ordem)||0); });
+
+  // Adiciona slide de dias sem acidentes sempre
+  lista.push({ _acidente:true, titulo:'Dias sem Acidentes', tipo:'conquista' });
+
+  if(lista.length === 0){
+    var empty = document.createElement('div');
+    empty.className = 'slide slide-empty active';
+    empty.innerHTML = '<div class="slide-empty-icon">📺</div><div class="slide-empty-txt">Nenhum conteúdo cadastrado</div>';
+    area.appendChild(empty);
+    return;
+  }
+
+  lista.forEach(function(s, i){
+    var div = document.createElement('div');
+    var tipo = (s.tipo||'info').toLowerCase();
+    div.className = 'slide tipo-'+tipo+(s._acidente?' slide-acidentes':'');
+    if(i===0) div.classList.add('active');
+
+    if(s._acidente){
+      div.innerHTML =
+        '<div class="acidentes-num" id="acidentes-num">'+diasSemAcidente+'</div>'+
+        '<div class="acidentes-label">DIAS SEM ACIDENTES DE TRABALHO</div>';
+    } else if(tipo==='imagem'){
+      var imgUrl = s.url||s.texto||'';
+      if(imgUrl){
+        div.innerHTML = '<img class="slide-imagem-img" src="'+imgUrl+'" alt="'+(s.titulo||'Imagem')+'" onerror="this.style.opacity=\'0.1\'">';
+      } else {
+        div.innerHTML = '<div class="slide-label">🖼 IMAGEM</div><div class="slide-titulo" style="opacity:.4">URL não definida</div>';
+      }
+    } else {
+      var cor = s.cor||'';
+      var corStyle = cor ? 'style="color:'+cor+'"':'';
+      div.innerHTML =
+        '<div class="slide-label">'+_tipoLabel(s.tipo)+'</div>'+
+        '<div class="slide-titulo" '+corStyle+'>'+(s.titulo||'')+'</div>'+
+        (s.texto?'<div class="slide-texto">'+(s.texto)+'</div>':'');
+    }
+    area.insertBefore(div, document.getElementById('slide-progress'));
+  });
+
+  // Dots
+  var dotsEl = document.getElementById('slide-dots');
+  dotsEl.innerHTML = '';
+  lista.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'dot'+(i===0?' active':'');
+    dotsEl.appendChild(d);
+  });
+
+  // Reinicia o carrossel
+  slideIdx = 0;
+  if(slideTimer) clearInterval(slideTimer);
+  if(progressTimer) clearInterval(progressTimer);
+  iniciarCarrossel(lista.length);
+}
+
+function _tipoLabel(tipo){
+  var m={aviso:'🔴 AVISO',info:'ℹ️ INFORMAÇÃO',conquista:'🏆 CONQUISTA',meta:'🎯 META',livre:'📌 DESTAQUE',imagem:'🖼 IMAGEM'};
+  return m[(tipo||'').toLowerCase()]||'📺 '+tipo;
+}
+
+function iniciarCarrossel(total){
+  if(total<=1) return;
+  progressStart = Date.now();
+  animarProgress(SLIDE_DURATION);
+  slideTimer = setInterval(function(){
+    slideIdx = (slideIdx+1) % total;
+    mostrarSlide(slideIdx, total);
+    progressStart = Date.now();
+    animarProgress(SLIDE_DURATION);
+  }, SLIDE_DURATION);
+}
+
+function mostrarSlide(idx, total){
+  var slides = document.querySelectorAll('#slides-area .slide');
+  slides.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+  var dots = document.querySelectorAll('.dot');
+  dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+}
+
+function animarProgress(duracao){
+  var bar = document.getElementById('slide-progress-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      bar.style.transition = 'width '+duracao+'ms linear';
+      bar.style.width = '100%';
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  DIAS SEM ACIDENTES
+// ═══════════════════════════════════════════════════
+function renderAcidentes(){
+  document.getElementById('acidentes-num-mini').textContent = diasSemAcidente;
+  var el = document.getElementById('acidentes-num');
+  if(el) el.textContent = diasSemAcidente;
+}
+
+// ═══════════════════════════════════════════════════
+//  TICKER
+// ═══════════════════════════════════════════════════
+function renderTicker(){
+  var recados = TV.recados.slice()
+    .sort(function(a,b){ return (parseInt(b.prioridade)||0)-(parseInt(a.prioridade)||0); });
+
+  var inner = document.getElementById('ticker-inner');
+  if(recados.length===0){
+    inner.textContent = '— Bem-vindo à Explosão Alimentos! —';
+    inner.style.animation='none';
+    return;
+  }
+
+  var txt = recados.map(function(r){ return r.texto||''; }).join('<span class="ticker-sep">✦</span>');
+  // Duplica para efeito contínuo
+  inner.innerHTML = txt + '<span class="ticker-sep">●</span>' + txt;
+
+  // Calcula velocidade (px/s = 120)
+  requestAnimationFrame(function(){
+    var w = inner.scrollWidth / 2;
+    var duracao = w / 90; // 90 px/s
+    inner.style.setProperty('--tx', '-'+(w)+'px');
+    inner.style.animation = 'ticker-scroll '+duracao+'s linear infinite';
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  ANIVERSARIANTES
+// ═══════════════════════════════════════════════════
+function renderAniversariantes(){
+  var lista = TV.aniversariantes.slice().sort(function(a,b){ return a.dia-b.dia; });
+  var el = document.getElementById('aniversariantes-list');
+  if(lista.length===0){
+    el.innerHTML='<div style="font-size:13px;opacity:.4">Nenhum aniversariante este mês</div>';
+    return;
+  }
+  el.innerHTML = lista.map(function(a){
+    return '<div class="aniv-item">'
+      +'<div class="aniv-data">'+String(a.dia).padStart(2,'0')+'/'+String(a.mes).padStart(2,'0')+'</div>'
+      +'<div class="aniv-nome">'+a.nome+'</div>'
+      +'<div class="aniv-setor">'+a.setor+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  EVENTOS
+// ═══════════════════════════════════════════════════
+function renderEventos(){
+  var lista = TV.eventos.slice().sort(function(a,b){ return new Date(a.inicio)-new Date(b.inicio); });
+  var el = document.getElementById('eventos-list');
+  if(lista.length===0){
+    el.innerHTML='<div style="font-size:13px;opacity:.4">Nenhum evento nos próximos 7 dias</div>';
+    return;
+  }
+  el.innerHTML = lista.map(function(ev){
+    var d = new Date(ev.inicio);
+    var label = String(d.getDate()).padStart(2,'0')+'/'+(d.getMonth()+1 < 10 ? '0' : '')+(d.getMonth()+1);
+    return '<div class="ev-item">'
+      +'<div class="ev-data">'+label+'</div>'
+      +'<div class="ev-titulo">'+(ev.titulo||ev.tipo||'Evento')+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  LOADER
+// ═══════════════════════════════════════════════════
+var _loaderHidden = false;
+function esconderLoader(){
+  if(_loaderHidden) return;
+  _loaderHidden = true;
+  var loader = document.getElementById('loader');
+  loader.classList.add('hide');
+  setTimeout(function(){ loader.style.display='none'; }, 600);
+}
+
+// ═══════════════════════════════════════════════════
+//  INICIALIZAÇÃO
+// ═══════════════════════════════════════════════════
+(function init(){
+  buscarDadosTV();
+  buscarClima();
+
+  // Atualização silenciosa a cada 1 minuto
+  setInterval(function(){
+    buscarDadosTV();
+    buscarClima();
+  }, UPDATE_INTERVAL);
+
+  // Fallback: esconde loader após 8s mesmo sem dados
+  setTimeout(function(){
+    esconderLoader();
+    if(TV.slides.length===0) renderSlides();
+    renderTicker();
+    renderAniversariantes();
+    renderEventos();
+  }, 8000);
+})();
+</script>
+</body>
+</html>
