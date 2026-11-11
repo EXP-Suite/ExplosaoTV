@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Explosão TV v1.3.1</title>
+<title>Explosão TV v1.4.0</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -475,7 +475,7 @@ html,body{
 // ═══════════════════════════════════════════════════
 //  CONFIGURAÇÃO
 // ═══════════════════════════════════════════════════
-var TV_VERSION = '1.3.1';
+var TV_VERSION = '1.4.0';
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
 var TV_URL     = SCRIPT_URL + '?action=getTVData';
 var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
@@ -486,6 +486,162 @@ var RELOAD_HOUR    = 4;      // 4h da manhã — recarrega a página
 
 // ═══════════════════════════════════════════════════
 //  ESTADO
+// ═══════════════════════════════════════════════════
+//  MENSAGENS DE ANIVERSÁRIO (75 femininas + 75 masculinas)
+// ═══════════════════════════════════════════════════
+var MSGS_ANIV_FEM = [
+  'Que este novo ano de vida seja repleto de alegrias, conquistas e muita saúde! A Explosão Alimentos celebra com você!',
+  'Hoje é o seu dia, e nada nos deixa mais felizes do que comemorar junto com você! Feliz aniversário!',
+  'Que cada sonho seu se torne realidade e cada desafio vire uma vitória! Você merece tudo de bom!',
+  'Uma profissional incrível como você merece um aniversário ainda mais incrível. Parabéns!',
+  'Hoje comemoramos não só o seu aniversário, mas tudo que você representa pra nossa equipe!',
+  'Que a vida te presenteie com tanta alegria quanto você traz pra todos ao redor. Feliz aniversário!',
+  'Mais um ano de história, conquistas e momentos especiais. Que venham muitos mais!',
+  'Você faz parte desta família e hoje é dia de celebrar você! Muita saúde e felicidade!',
+  'Que este aniversário marque o início de um ciclo ainda mais bonito na sua vida!',
+  'A cada ano que passa, você fica ainda mais especial para todos nós. Parabéns!',
+  'Que Deus te abençoe com saúde, paz e realizações neste novo ano de vida!',
+  'Hoje o time todo para para te parabenizar. Você merece essa homenagem!',
+  'Sua dedicação inspira a todos. Que este aniversário seja tão especial quanto você!',
+  'Que a felicidade seja sua companheira constante neste novo ano que começa hoje!',
+  'Comemorar seu aniversário com você é uma honra. Que venham mais muitos anos juntos!',
+  'Uma nova página se abre hoje na história da sua vida. Que seja linda!',
+  'Que você continue brilhando e iluminando tudo ao redor. Feliz aniversário!',
+  'A Explosão Alimentos te deseja um aniversário cheio de amor, saúde e realizações!',
+  'Que este dia seja o mais especial do ano, assim como você é especial para nós!',
+  'Parabéns! Que cada desejo do seu coração seja atendido neste novo ciclo!',
+  'Hoje é o seu dia! Aproveite cada momento e saiba que somos gratos por ter você aqui!',
+  'Que a energia boa de hoje te acompanhe por todo o ano. Feliz aniversário!',
+  'Mais um ano de vida cheia de propósito e conquistas. Continue assim, você é incrível!',
+  'Sua presença faz a diferença no dia a dia. Hoje é dia de celebrar você!',
+  'Que neste aniversário seus sonhos fiquem ainda mais perto de se realizarem!',
+  'Vida longa, saúde plena e muito sucesso! É isso que desejamos a você hoje!',
+  'Hoje a empresa inteira vibra pela sua vida. Parabéns, você merece!',
+  'Que este novo ano traga oportunidades lindas e momentos inesquecíveis para você!',
+  'Obrigada por tudo que você entrega a cada dia. Hoje é o seu dia! Aproveite!',
+  'Que você chegue a mais este aniversário com o coração cheio de gratidão e esperança!',
+  'Feliz aniversário! Que sua jornada continue cheia de conquistas e momentos especiais!',
+  'Você é parte fundamental desta equipe. Celebramos com alegria mais um ano seu!',
+  'Que a vida te devolva em dobro tudo de bom que você semeia todos os dias!',
+  'Hoje paramos tudo para te dizer: você é especial e faz a diferença aqui!',
+  'Que cada vela do seu bolo represente uma conquista diferente. Parabéns!',
+  'Sorria! Hoje é o seu aniversário e toda a equipe comemora junto com você!',
+  'Que este dia seja marcado pela alegria, pelo carinho e por muito amor!',
+  'Mais uma volta ao sol repleta de aprendizados e conquistas. Que venham muitas mais!',
+  'Sua história é de inspiração. Que este novo capítulo seja o melhor de todos!',
+  'A Explosão Alimentos celebra com você mais este ano de vida! Feliz aniversário!',
+  'Que neste aniversário você sinta o quanto é querida por todos aqui!',
+  'Parabéns! Que a sua vida continue linda, cheia de luz e de pessoas boas!',
+  'Hoje é dia de celebrar você e tudo de bom que você representa pra nossa empresa!',
+  'Que este ano seja de renovação, saúde e muito sucesso em tudo que você se propuser!',
+  'Sua alegria é contagiante e sua dedicação é admirável. Feliz aniversário!',
+  'Que você colha em dobro tudo que plantou com carinho ao longo desta jornada!',
+  'É uma honra ter você no time. Parabéns pela vida e por tudo que você conquista!',
+  'Que este aniversário traga novos horizontes e realizações para a sua vida!',
+  'Celebramos hoje mais um ano de uma pessoa que faz a diferença onde vai. Parabéns!',
+  'Que Deus guarde seus passos e ilumine seu caminho neste novo ciclo. Feliz aniversário!',
+  'Hoje a gratidão por ter você no time está ainda maior. Parabéns!',
+  'Que a sua vida seja sempre repleta de momentos que fazem o coração sorrir!',
+  'Você chegou a mais um aniversário cheia de conquistas. Continue assim, você é incrível!',
+  'Que este dia seja apenas o começo de um novo ciclo lindo para você!',
+  'Parabéns! A equipe Explosão celebra com muito carinho este dia tão especial!',
+  'Que a vida continue te surpreendendo positivamente a cada ano que passa!',
+  'Sua presença aqui é um presente para todos nós. Feliz aniversário!',
+  'Que neste novo ano de vida você realize tudo que planejou com tanto cuidado!',
+  'Mais um aniversário para celebrar uma mulher forte, dedicada e especial!',
+  'Que você seja abençoada com saúde, amor e muita prosperidade. Parabéns!',
+  'Hoje é o seu dia e toda a Explosão Alimentos comemora junto com você!',
+  'Que este aniversário seja o mais inesquecível até agora. Você merece muito!',
+  'Parabéns por mais um ano cheio de superações e conquistas maravilhosas!',
+  'Que a paz, a saúde e a alegria nunca faltem na sua vida. Feliz aniversário!',
+  'Você tem o dom de transformar os ambientes com a sua presença. Parabéns!',
+  'Que este dia seja regado de carinho, celebração e muito amor da nossa parte!',
+  'Mais um ano escrevendo uma história bonita. Continue assim, você nos inspira!',
+  'A Explosão celebra com você mais uma volta ao sol! Que venham muitas outras!',
+  'Que neste novo ciclo tudo se multiplique: a saúde, a alegria e as conquistas!',
+  'Parabéns! Que cada sonho seu ganhe asas e voe cada vez mais alto!',
+  'Hoje a empresa toda para para reconhecer o quanto você é importante para nós!',
+  'Que este aniversário seja o ponto de partida para realizações ainda maiores!',
+  'Sua energia positiva faz a diferença no nosso dia a dia. Feliz aniversário!',
+  'Que você chegue ao próximo aniversário com ainda mais histórias boas para contar!'
+];
+var MSGS_ANIV_MASC = [
+  'Que este novo ano de vida seja repleto de alegrias, conquistas e muita saúde! A Explosão Alimentos celebra com você!',
+  'Hoje é o seu dia, e nada nos deixa mais felizes do que comemorar junto com você! Feliz aniversário!',
+  'Que cada sonho seu se torne realidade e cada desafio vire uma vitória! Você merece tudo de bom!',
+  'Um profissional incrível como você merece um aniversário ainda mais incrível. Parabéns!',
+  'Hoje comemoramos não só o seu aniversário, mas tudo que você representa pra nossa equipe!',
+  'Que a vida te presenteie com tanta alegria quanto você traz pra todos ao redor. Feliz aniversário!',
+  'Mais um ano de história, conquistas e momentos especiais. Que venham muitos mais!',
+  'Você faz parte desta família e hoje é dia de celebrar você! Muita saúde e felicidade!',
+  'Que este aniversário marque o início de um ciclo ainda mais bonito na sua vida!',
+  'A cada ano que passa, você fica ainda mais especial para todos nós. Parabéns!',
+  'Que Deus te abençoe com saúde, paz e realizações neste novo ano de vida!',
+  'Hoje o time todo para para te parabenizar. Você merece essa homenagem!',
+  'Sua dedicação inspira a todos. Que este aniversário seja tão especial quanto você!',
+  'Que a felicidade seja sua companheira constante neste novo ano que começa hoje!',
+  'Comemorar seu aniversário com você é uma honra. Que venham mais muitos anos juntos!',
+  'Uma nova página se abre hoje na história da sua vida. Que seja linda!',
+  'Que você continue brilhando e iluminando tudo ao redor. Feliz aniversário!',
+  'A Explosão Alimentos te deseja um aniversário cheio de amor, saúde e realizações!',
+  'Que este dia seja o mais especial do ano, assim como você é especial para nós!',
+  'Parabéns! Que cada desejo do seu coração seja atendido neste novo ciclo!',
+  'Hoje é o seu dia! Aproveite cada momento e saiba que somos gratos por ter você aqui!',
+  'Que a energia boa de hoje te acompanhe por todo o ano. Feliz aniversário!',
+  'Mais um ano de vida cheia de propósito e conquistas. Continue assim, você é incrível!',
+  'Sua presença faz a diferença no dia a dia. Hoje é dia de celebrar você!',
+  'Que neste aniversário seus sonhos fiquem ainda mais perto de se realizarem!',
+  'Vida longa, saúde plena e muito sucesso! É isso que desejamos a você hoje!',
+  'Hoje a empresa inteira vibra pela sua vida. Parabéns, você merece!',
+  'Que este novo ano traga oportunidades lindas e momentos inesquecíveis para você!',
+  'Obrigado por tudo que você entrega a cada dia. Hoje é o seu dia! Aproveite!',
+  'Que você chegue a mais este aniversário com o coração cheio de gratidão e esperança!',
+  'Feliz aniversário! Que sua jornada continue cheia de conquistas e momentos especiais!',
+  'Você é parte fundamental desta equipe. Celebramos com alegria mais um ano seu!',
+  'Que a vida te devolva em dobro tudo de bom que você semeia todos os dias!',
+  'Hoje paramos tudo para te dizer: você é especial e faz a diferença aqui!',
+  'Que cada vela do seu bolo represente uma conquista diferente. Parabéns!',
+  'Sorria! Hoje é o seu aniversário e toda a equipe comemora junto com você!',
+  'Que este dia seja marcado pela alegria, pelo carinho e por muito amor!',
+  'Mais uma volta ao sol repleta de aprendizados e conquistas. Que venham muitas mais!',
+  'Sua história é de inspiração. Que este novo capítulo seja o melhor de todos!',
+  'A Explosão Alimentos celebra com você mais este ano de vida! Feliz aniversário!',
+  'Que neste aniversário você sinta o quanto é querido por todos aqui!',
+  'Parabéns! Que a sua vida continue linda, cheia de luz e de pessoas boas!',
+  'Hoje é dia de celebrar você e tudo de bom que você representa pra nossa empresa!',
+  'Que este ano seja de renovação, saúde e muito sucesso em tudo que você se propuser!',
+  'Sua alegria é contagiante e sua dedicação é admirável. Feliz aniversário!',
+  'Que você colha em dobro tudo que plantou com carinho ao longo desta jornada!',
+  'É uma honra ter você no time. Parabéns pela vida e por tudo que você conquista!',
+  'Que este aniversário traga novos horizontes e realizações para a sua vida!',
+  'Celebramos hoje mais um ano de um profissional que faz a diferença onde vai. Parabéns!',
+  'Que Deus guarde seus passos e ilumine seu caminho neste novo ciclo. Feliz aniversário!',
+  'Hoje a gratidão por ter você no time está ainda maior. Parabéns!',
+  'Que a sua vida seja sempre repleta de momentos que fazem o coração sorrir!',
+  'Você chegou a mais um aniversário cheio de conquistas. Continue assim, você é incrível!',
+  'Que este dia seja apenas o começo de um novo ciclo lindo para você!',
+  'Parabéns! A equipe Explosão celebra com muito carinho este dia tão especial!',
+  'Que a vida continue te surpreendendo positivamente a cada ano que passa!',
+  'Sua presença aqui é um presente para todos nós. Feliz aniversário!',
+  'Que neste novo ano de vida você realize tudo que planejou com tanto cuidado!',
+  'Mais um aniversário para celebrar um homem forte, dedicado e especial!',
+  'Que você seja abençoado com saúde, amor e muita prosperidade. Parabéns!',
+  'Hoje é o seu dia e toda a Explosão Alimentos comemora junto com você!',
+  'Que este aniversário seja o mais inesquecível até agora. Você merece muito!',
+  'Parabéns por mais um ano cheio de superações e conquistas maravilhosas!',
+  'Que a paz, a saúde e a alegria nunca faltem na sua vida. Feliz aniversário!',
+  'Você tem o dom de transformar os ambientes com a sua presença. Parabéns!',
+  'Que este dia seja regado de carinho, celebração e muito amor da nossa parte!',
+  'Mais um ano escrevendo uma história bonita. Continue assim, você nos inspira!',
+  'A Explosão celebra com você mais uma volta ao sol! Que venham muitas outras!',
+  'Que neste novo ciclo tudo se multiplique: a saúde, a alegria e as conquistas!',
+  'Parabéns! Que cada sonho seu ganhe asas e voe cada vez mais alto!',
+  'Hoje a empresa toda para para reconhecer o quanto você é importante para nós!',
+  'Que este aniversário seja o ponto de partida para realizações ainda maiores!',
+  'Sua energia positiva faz a diferença no nosso dia a dia. Feliz aniversário!',
+  'Que você chegue ao próximo aniversário com ainda mais histórias boas para contar!'
+];
+
 // ═══════════════════════════════════════════════════
 var TV = { slides:[], recados:[], config:{}, eventos:[], aniversariantes:[], colaboradores:[] };
 var slideIdx    = 0;
@@ -588,7 +744,15 @@ function buscarDadosTV(){
       // Aplica configurações
       if(TV.config.nomeEmpresa)
         document.getElementById('header-empresa').textContent = TV.config.nomeEmpresa;
-      if(TV.config.diasSemAcidente){
+      // Dias sem acidente: prefere calcular a partir da dataUltimoAcidente (auto-incrementa)
+      // Fallback: usa diasSemAcidente fixo do config
+      if(TV.config.dataUltimoAcidente){
+        var partsAc = String(TV.config.dataUltimoAcidente).split('-');
+        var dtAc = new Date(parseInt(partsAc[0]),parseInt(partsAc[1])-1,parseInt(partsAc[2]));
+        var hoje_ = new Date(); hoje_.setHours(0,0,0,0);
+        diasSemAcidente = Math.max(0, Math.floor((hoje_ - dtAc)/(1000*60*60*24)));
+        renderAcidentes();
+      } else if(TV.config.diasSemAcidente){
         diasSemAcidente = parseInt(TV.config.diasSemAcidente)||0;
         renderAcidentes();
       }
@@ -626,12 +790,29 @@ function renderSlides(){
   // Se só dataFim    → ativo até aquela data
   // Se ambos         → ativo apenas dentro do intervalo
   function parseDia(str){
-    if(!str || String(str).trim()==='') return null;
+    if(!str) return null;
+    // Date object passado diretamente
+    if(str instanceof Date) return new Date(str.getFullYear(), str.getMonth(), str.getDate());
     var s = String(str).trim();
-    // Aceita AAAA-MM-DD ou DD/MM/AAAA
-    var p = s.indexOf('-')>0 ? s.split('-') : s.split('/').reverse();
-    if(p.length<3) return null;
-    return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+    if(!s || s==='') return null;
+    // ISO com hora: "2026-11-10T00:00:00.000Z" → pega só a data
+    if(s.length > 10 && s.indexOf('T') > 0) s = s.slice(0, 10);
+    // AAAA-MM-DD
+    if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
+      var p = s.split('-');
+      return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+    }
+    // DD/MM/AAAA
+    if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){
+      var p = s.split('/');
+      return new Date(parseInt(p[2]), parseInt(p[1])-1, parseInt(p[0]));
+    }
+    // número serial Excel/Sheets (dias desde 1899-12-30)
+    if(/^\d+(\.\d+)?$/.test(s)){
+      var dt = new Date(Math.round((Number(s) - 25569) * 86400 * 1000));
+      return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+    }
+    return null;
   }
   var hoje0 = new Date(); // com hora
   var hojeDate = new Date(hoje0.getFullYear(), hoje0.getMonth(), hoje0.getDate()); // meia-noite local
@@ -663,12 +844,26 @@ function renderSlides(){
     });
   }
 
-  // 3. Aniversariantes de hoje
+  // 3. Aniversariantes: hoje ou sexta antecipando sábado/domingo
   var diaHoje = hoje.getDate();
   var mesHoje = hoje.getMonth()+1;
-  var anivHoje = (TV.aniversariantes||[]).filter(function(a){ return a.dia===diaHoje && a.mes===mesHoje; });
+  var diaSemana = hoje.getDay(); // 0=dom,1=seg,...,5=sex,6=sab
+  // Dias a verificar: sempre hoje; na sexta, também sab(+1) e dom(+2)
+  var diasVerif = [{ d: diaHoje, m: mesHoje }];
+  if(diaSemana === 5){ // sexta
+    var sab = new Date(hoje); sab.setDate(sab.getDate()+1);
+    var dom = new Date(hoje); dom.setDate(dom.getDate()+2);
+    diasVerif.push({ d: sab.getDate(), m: sab.getMonth()+1 });
+    diasVerif.push({ d: dom.getDate(), m: dom.getMonth()+1 });
+  }
+  var anivHoje = (TV.aniversariantes||[]).filter(function(a){
+    return diasVerif.some(function(dv){ return a.dia===dv.d && a.mes===dv.m; });
+  });
   if(anivHoje.length > 0){
-    lista.push({ _aniversario:true, _anivs:anivHoje });
+    // Um slide por aniversariante para personalizar a mensagem
+    anivHoje.forEach(function(a){
+      lista.push({ _aniversario:true, _aniv:a });
+    });
   }
 
   if(lista.length === 0){
@@ -699,12 +894,21 @@ function renderSlides(){
         (c.setor?'<div style="margin-top:16px;font-size:16px;font-weight:600;color:var(--azul-vivo);background:var(--azul-claro);padding:8px 20px;border-radius:20px">'+c.setor+'</div>':'');
     } else if(s._aniversario){
       div.classList.add('slide-aniversario');
-      var nomes = s._anivs.map(function(a){ return a.nome; });
-      var txt = nomes.length===1 ? nomes[0] : nomes.slice(0,-1).join(', ')+' e '+nomes[nomes.length-1];
+      var a = s._aniv;
+      var isFem = (String(a.sexo||'').toLowerCase() === 'feminino' || String(a.sexo||'').toLowerCase() === 'f');
+      var msg = MSGS_ANIV_FEM[Math.floor(Math.random()*MSGS_ANIV_FEM.length)];
+      if(!isFem) msg = MSGS_ANIV_MASC[Math.floor(Math.random()*MSGS_ANIV_MASC.length)];
+      // antecipação FDS?
+      var antecipadoTag = '';
+      if(diaSemana===5 && (a.dia!==diaHoje || a.mes!==mesHoje)){
+        antecipadoTag = '<div style="margin-top:12px;font-size:14px;font-weight:600;color:var(--amarelo);background:rgba(217,119,6,.12);padding:6px 18px;border-radius:20px">🗓 Aniversário no fim de semana — comemorando hoje!</div>';
+      }
       div.innerHTML =
         '<div class="slide-label">🎂 PARABÉNS!</div>'+
-        '<div class="slide-titulo">Feliz Aniversário,<br>'+txt+'!</div>'+
-        '<div class="slide-texto">A Explosão Alimentos celebra com você este dia especial! 🎊</div>';
+        '<div class="slide-titulo">Feliz Aniversário,<br>'+a.nome+'!</div>'+
+        '<div class="slide-texto">'+msg+'</div>'+
+        (a.setor?'<div style="margin-top:14px;font-size:14px;font-weight:600;color:var(--amarelo);opacity:.8">'+a.setor+'</div>':'')+
+        antecipadoTag;
     } else if(tipo==='imagem'){
       var imgUrl = s.url||s.texto||'';
       if(imgUrl){
