@@ -33,7 +33,7 @@
 }
 html,body{
   width:100%;height:100%;
-  background:#1A1A2E;
+  background:#E8EDF5;
   color:var(--text);
   font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   overflow:hidden;
@@ -57,191 +57,193 @@ html,body{
 ═══════════════════════════════════════════════════ */
 #painel-esq{
   width:var(--painel-esq-w);
-  background:linear-gradient(180deg, #0F172A 0%, #1E293B 60%, #0F172A 100%);
+  background:#FFFFFF;
   display:flex;
   flex-direction:column;
   overflow:hidden;
   position:relative;
-  border-right:1px solid rgba(255,255,255,.07);
+  border-right:3px solid #E2E8F0;
   flex-shrink:0;
+  box-shadow:2px 0 12px rgba(0,0,0,.06);
 }
 /* Acento vermelho lateral esquerdo */
 #painel-esq::before{
   content:'';
   position:absolute;left:0;top:0;bottom:0;
-  width:4px;
-  background:linear-gradient(180deg, var(--vermelho) 0%, var(--azul-vivo) 50%, var(--vermelho) 100%);
+  width:5px;
+  background:linear-gradient(180deg, var(--vermelho) 0%, var(--azul-vivo) 55%, var(--vermelho) 100%);
   z-index:5;
 }
 
 /* Logo e nome empresa */
 #esq-logo{
-  padding:10px 20px 8px 26px;
+  padding:16px 24px 12px 30px;
   flex-shrink:0;
   display:flex;
   flex-direction:column;
   align-items:center;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid #E2E8F0;
+  background:#FAFBFC;
 }
 #esq-logo-img{
-  width:130px;height:auto;display:block;
-  filter:drop-shadow(0 2px 10px rgba(0,0,0,.4));
+  width:150px;height:auto;display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.12));
 }
 #esq-logo-fallback{display:none;flex-direction:column;align-items:center;line-height:1;}
 #esq-logo-empresa{
   font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(255,255,255,.4);
-  margin-top:4px;text-align:center;
+  color:var(--text2);
+  margin-top:5px;text-align:center;
 }
 
 /* Relógio */
 #esq-relogio{
-  padding:8px 20px 7px 26px;
+  padding:14px 24px 12px 30px;
   flex-shrink:0;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid #E2E8F0;
   text-align:center;
+  background:#fff;
 }
 #esq-clock{
-  font-size:40px;font-weight:800;
+  font-size:52px;font-weight:800;
   font-variant-numeric:tabular-nums;
-  letter-spacing:2px;line-height:1;
-  color:#fff;
-  text-shadow:0 0 24px rgba(37,99,235,.5);
+  letter-spacing:1px;line-height:1;
+  color:var(--azul);
 }
 #esq-date{
-  font-size:11px;font-weight:500;
-  color:rgba(255,255,255,.45);
-  margin-top:3px;letter-spacing:.4px;
+  font-size:13px;font-weight:500;
+  color:var(--text2);
+  margin-top:4px;letter-spacing:.3px;
 }
 
 /* Clima */
 #esq-clima{
-  padding:8px 20px 7px 26px;
+  padding:12px 24px 10px 30px;
   flex-shrink:0;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid #E2E8F0;
+  display:flex;align-items:center;gap:14px;
+  background:#FAFBFC;
 }
-#esq-clima-icon{font-size:30px;line-height:1}
+#esq-clima-icon{font-size:34px;line-height:1}
 #esq-clima-info{}
-#esq-clima-temp{font-size:24px;font-weight:800;line-height:1;color:#fff}
-#esq-clima-desc{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
-#esq-clima-extra{font-size:9px;color:rgba(255,255,255,.32);margin-top:1px}
+#esq-clima-temp{font-size:28px;font-weight:800;line-height:1;color:var(--text)}
+#esq-clima-desc{font-size:12px;color:var(--text2);margin-top:3px}
+#esq-clima-extra{font-size:11px;color:var(--text3);margin-top:2px}
 
 /* Bloco dias sem acidentes — DESTAQUE */
 #esq-acidentes{
-  padding:10px 20px 8px 26px;
+  padding:14px 24px 12px 30px;
   flex-shrink:0;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  background:linear-gradient(135deg,rgba(5,150,105,.18) 0%,rgba(4,120,87,.08) 100%);
+  border-bottom:1px solid #E2E8F0;
+  background:linear-gradient(135deg,#D1FAE5 0%,#A7F3D0 100%);
   position:relative;
   overflow:hidden;
   text-align:center;
 }
 #esq-acidentes::before{
   content:'🦺';
-  position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  font-size:36px;opacity:.12;
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-size:44px;opacity:.18;
   line-height:1;
 }
 #esq-acident-num{
-  font-size:56px;font-weight:900;line-height:1;
-  color:#34D399;
+  font-size:64px;font-weight:900;line-height:1;
+  color:#065F46;
   letter-spacing:-2px;
-  text-shadow:0 0 32px rgba(52,211,153,.4);
 }
 #esq-acident-label{
-  font-size:9px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
-  color:#6EE7B7;margin-top:3px;opacity:.85;
+  font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:#047857;margin-top:4px;
 }
 #esq-acident-sub{
-  font-size:8px;color:rgba(255,255,255,.28);
-  margin-top:2px;letter-spacing:.4px;
+  font-size:10px;color:#059669;
+  margin-top:3px;letter-spacing:.3px;
 }
 
 /* Comunicado em Destaque — painel fixo da esquerda */
 #esq-comunicado{
   flex:1;
   min-height:0;
-  padding:10px 20px 10px 26px;
+  padding:14px 24px 14px 30px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   overflow:hidden;
   position:relative;
+  background:#EFF4FF;
+  border-bottom:1px solid #E2E8F0;
 }
 #esq-comunicado.vazio{
   display:flex;
   align-items:center;
   justify-content:center;
+  background:#FAFBFC;
 }
 #esq-com-label{
-  font-size:8px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
-  color:rgba(255,255,255,.32);margin-bottom:6px;
-  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--azul-vivo);margin-bottom:8px;
+  display:flex;align-items:center;gap:7px;
   flex-shrink:0;
 }
 #esq-com-label::before{
-  content:'';display:inline-block;
-  width:14px;height:2px;border-radius:1px;
-  background:linear-gradient(90deg,var(--azul-vivo),var(--vermelho));
-  flex-shrink:0;
+  content:'📌';font-size:13px;
 }
 #esq-com-titulo{
-  font-size:18px;font-weight:800;line-height:1.15;
-  color:#fff;
+  font-size:22px;font-weight:800;line-height:1.2;
+  color:var(--azul);
   margin-bottom:8px;
   overflow-wrap:break-word;
-  text-shadow:0 1px 6px rgba(0,0,0,.4);
   flex-shrink:0;
 }
 #esq-com-texto{
-  font-size:13px;font-weight:400;line-height:1.6;
-  color:rgba(255,255,255,.72);
+  font-size:15px;font-weight:400;line-height:1.6;
+  color:var(--text);
   overflow-wrap:break-word;
   overflow:hidden;
 }
 #esq-com-vazio-txt{
-  font-size:10px;color:rgba(255,255,255,.15);
-  letter-spacing:1.5px;text-transform:uppercase;text-align:center;
+  font-size:13px;color:var(--text3);
+  letter-spacing:1px;text-align:center;
 }
 
 /* Aniversariantes na parte inferior do painel esquerdo */
 #esq-aniv{
   flex-shrink:0;
-  max-height:130px;
   overflow:hidden;
-  border-top:1px solid rgba(255,255,255,.08);
-  padding:8px 20px 8px 26px;
+  border-top:1px solid #E2E8F0;
+  padding:12px 24px 12px 30px;
+  background:#FFFBEB;
+  min-height:110px;
+  max-height:200px;
 }
 #esq-aniv-title{
-  font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(255,255,255,.35);margin-bottom:7px;
-  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--amarelo);margin-bottom:9px;
+  display:flex;align-items:center;gap:7px;
 }
 #esq-aniv-title::before{
-  content:'';display:inline-block;
-  width:12px;height:2px;border-radius:1px;
-  background:var(--amarelo);flex-shrink:0;
+  content:'🎂';font-size:14px;
 }
 #esq-aniv-list{
-  display:flex;flex-direction:column;gap:4px;
+  display:flex;flex-direction:column;gap:6px;
   overflow:hidden;
 }
 .esq-aniv-item{
-  display:flex;align-items:center;gap:7px;
+  display:flex;align-items:center;gap:10px;
 }
 .esq-aniv-data{
-  font-size:9px;font-weight:700;
-  background:rgba(217,119,6,.22);color:#FCD34D;
-  border-radius:5px;padding:2px 5px;
-  min-width:30px;text-align:center;flex-shrink:0;
+  font-size:12px;font-weight:700;
+  background:#FEF3C7;color:var(--amarelo);
+  border-radius:6px;padding:3px 7px;
+  min-width:38px;text-align:center;flex-shrink:0;
+  border:1px solid #FDE68A;
 }
 .esq-aniv-nome{
-  font-size:11px;font-weight:600;color:rgba(255,255,255,.8);
+  font-size:14px;font-weight:600;color:var(--text);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.esq-aniv-hoje .esq-aniv-data{background:var(--amarelo);color:#fff;}
-.esq-aniv-hoje .esq-aniv-nome{color:#FCD34D;}
+.esq-aniv-hoje .esq-aniv-data{background:var(--amarelo);color:#fff;border-color:var(--amarelo);}
+.esq-aniv-hoje .esq-aniv-nome{color:#92400E;font-weight:700;}
 
 /* ═══════════════════════════════════════════════════
    PAINEL DIREITO (60%) — carrossel
@@ -591,7 +593,7 @@ html,body{
 </div>
 
 <script>
-var TV_VERSION = '1.5.1';
+var TV_VERSION = '1.5.2';
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
 var TV_URL     = SCRIPT_URL + '?action=getTVData';
 var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
