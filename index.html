@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=1280, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Explosão TV v1.5.0</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -27,12 +27,13 @@
   --text:#0F172A;
   --text2:#64748B;
   --text3:#94A3B8;
-  --ticker-h:52px;
-  --painel-esq-w:40%;
-  --painel-dir-w:60%;
+  --ticker-h:56px;
+  --painel-esq-w:42%;
+  --painel-dir-w:58%;
 }
 html,body{
   width:100%;height:100%;
+  min-width:1280px;
   background:#E8EDF5;
   color:var(--text);
   font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
@@ -77,7 +78,7 @@ html,body{
 
 /* Logo e nome empresa */
 #esq-logo{
-  padding:16px 24px 12px 30px;
+  padding:18px 28px 14px 34px;
   flex-shrink:0;
   display:flex;
   flex-direction:column;
@@ -86,53 +87,53 @@ html,body{
   background:#FAFBFC;
 }
 #esq-logo-img{
-  width:150px;height:auto;display:block;
+  width:170px;height:auto;display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,.12));
 }
 #esq-logo-fallback{display:none;flex-direction:column;align-items:center;line-height:1;}
 #esq-logo-empresa{
-  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
   color:var(--text2);
-  margin-top:5px;text-align:center;
+  margin-top:6px;text-align:center;
 }
 
 /* Relógio */
 #esq-relogio{
-  padding:14px 24px 12px 30px;
+  padding:18px 28px 16px 34px;
   flex-shrink:0;
   border-bottom:1px solid #E2E8F0;
   text-align:center;
   background:#fff;
 }
 #esq-clock{
-  font-size:52px;font-weight:800;
+  font-size:72px;font-weight:800;
   font-variant-numeric:tabular-nums;
   letter-spacing:1px;line-height:1;
   color:var(--azul);
 }
 #esq-date{
-  font-size:13px;font-weight:500;
+  font-size:16px;font-weight:500;
   color:var(--text2);
-  margin-top:4px;letter-spacing:.3px;
+  margin-top:6px;letter-spacing:.3px;
 }
 
 /* Clima */
 #esq-clima{
-  padding:12px 24px 10px 30px;
+  padding:16px 28px 14px 34px;
   flex-shrink:0;
   border-bottom:1px solid #E2E8F0;
-  display:flex;align-items:center;gap:14px;
+  display:flex;align-items:center;gap:18px;
   background:#FAFBFC;
 }
-#esq-clima-icon{font-size:34px;line-height:1}
+#esq-clima-icon{font-size:44px;line-height:1}
 #esq-clima-info{}
-#esq-clima-temp{font-size:28px;font-weight:800;line-height:1;color:var(--text)}
-#esq-clima-desc{font-size:12px;color:var(--text2);margin-top:3px}
-#esq-clima-extra{font-size:11px;color:var(--text3);margin-top:2px}
+#esq-clima-temp{font-size:36px;font-weight:800;line-height:1;color:var(--text)}
+#esq-clima-desc{font-size:15px;color:var(--text2);margin-top:4px}
+#esq-clima-extra{font-size:13px;color:var(--text3);margin-top:3px}
 
 /* Bloco dias sem acidentes — DESTAQUE */
 #esq-acidentes{
-  padding:14px 24px 12px 30px;
+  padding:18px 28px 16px 34px;
   flex-shrink:0;
   border-bottom:1px solid #E2E8F0;
   background:linear-gradient(135deg,#D1FAE5 0%,#A7F3D0 100%);
@@ -142,29 +143,29 @@ html,body{
 }
 #esq-acidentes::before{
   content:'🦺';
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  font-size:44px;opacity:.18;
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  font-size:56px;opacity:.18;
   line-height:1;
 }
 #esq-acident-num{
-  font-size:64px;font-weight:900;line-height:1;
+  font-size:84px;font-weight:900;line-height:1;
   color:#065F46;
-  letter-spacing:-2px;
+  letter-spacing:-3px;
 }
 #esq-acident-label{
-  font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-  color:#047857;margin-top:4px;
+  font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:#047857;margin-top:5px;
 }
 #esq-acident-sub{
-  font-size:10px;color:#059669;
-  margin-top:3px;letter-spacing:.3px;
+  font-size:12px;color:#059669;
+  margin-top:4px;letter-spacing:.3px;
 }
 
 /* Comunicado em Destaque — painel fixo da esquerda */
 #esq-comunicado{
   flex:1;
   min-height:0;
-  padding:14px 24px 14px 30px;
+  padding:18px 28px 16px 34px;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -180,29 +181,32 @@ html,body{
   background:#FAFBFC;
 }
 #esq-com-label{
-  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--azul-vivo);margin-bottom:8px;
-  display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--azul-vivo);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
   flex-shrink:0;
 }
 #esq-com-label::before{
-  content:'📌';font-size:13px;
+  content:'📌';font-size:15px;
 }
 #esq-com-titulo{
-  font-size:22px;font-weight:800;line-height:1.2;
+  font-size:28px;font-weight:800;line-height:1.2;
   color:var(--azul);
-  margin-bottom:8px;
+  margin-bottom:10px;
   overflow-wrap:break-word;
   flex-shrink:0;
 }
 #esq-com-texto{
-  font-size:15px;font-weight:400;line-height:1.6;
+  font-size:18px;font-weight:400;line-height:1.6;
   color:var(--text);
   overflow-wrap:break-word;
   overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:4;
 }
 #esq-com-vazio-txt{
-  font-size:13px;color:var(--text3);
+  font-size:16px;color:var(--text3);
   letter-spacing:1px;text-align:center;
 }
 
@@ -211,35 +215,35 @@ html,body{
   flex-shrink:0;
   overflow:hidden;
   border-top:1px solid #E2E8F0;
-  padding:12px 24px 12px 30px;
+  padding:16px 28px 16px 34px;
   background:#FFFBEB;
-  min-height:110px;
-  max-height:200px;
+  min-height:130px;
+  max-height:230px;
 }
 #esq-aniv-title{
-  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--amarelo);margin-bottom:9px;
-  display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--amarelo);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
 }
 #esq-aniv-title::before{
-  content:'🎂';font-size:14px;
+  content:'🎂';font-size:16px;
 }
 #esq-aniv-list{
-  display:flex;flex-direction:column;gap:6px;
+  display:flex;flex-direction:column;gap:9px;
   overflow:hidden;
 }
 .esq-aniv-item{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:12px;
 }
 .esq-aniv-data{
-  font-size:12px;font-weight:700;
+  font-size:14px;font-weight:700;
   background:#FEF3C7;color:var(--amarelo);
-  border-radius:6px;padding:3px 7px;
-  min-width:38px;text-align:center;flex-shrink:0;
+  border-radius:7px;padding:4px 9px;
+  min-width:46px;text-align:center;flex-shrink:0;
   border:1px solid #FDE68A;
 }
 .esq-aniv-nome{
-  font-size:14px;font-weight:600;color:var(--text);
+  font-size:17px;font-weight:600;color:var(--text);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .esq-aniv-hoje .esq-aniv-data{background:var(--amarelo);color:#fff;border-color:var(--amarelo);}
@@ -280,21 +284,21 @@ html,body{
   pointer-events:auto;
 }
 .slide-label{
-  font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
-  padding:5px 16px;border-radius:20px;
-  margin-bottom:20px;
+  font-size:14px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  padding:7px 22px;border-radius:24px;
+  margin-bottom:24px;
 }
 .slide-titulo{
-  font-size:52px;font-weight:800;line-height:1.08;
+  font-size:62px;font-weight:800;line-height:1.08;
   text-align:center;
-  max-width:800px;
+  max-width:850px;
   color:var(--text);
 }
 .slide-texto{
-  font-size:22px;font-weight:400;line-height:1.65;
+  font-size:26px;font-weight:400;line-height:1.65;
   text-align:center;
-  max-width:720px;
-  margin-top:14px;
+  max-width:760px;
+  margin-top:18px;
   color:var(--text2);
 }
 /* Cores por tipo */
@@ -323,12 +327,12 @@ html,body{
 /* Slide acidentes */
 .slide-acidentes{background:var(--verde-claro);}
 .acidentes-num{
-  font-size:140px;font-weight:900;line-height:1;
+  font-size:180px;font-weight:900;line-height:1;
   color:var(--verde);letter-spacing:-6px;
 }
 .acidentes-label{
-  font-size:15px;font-weight:700;letter-spacing:4px;
-  color:var(--verde);margin-top:8px;
+  font-size:20px;font-weight:700;letter-spacing:4px;
+  color:var(--verde);margin-top:12px;
   text-transform:uppercase;opacity:.7;
 }
 
@@ -426,7 +430,7 @@ html,body{
   flex-shrink:0;
   background:var(--vermelho-esc);
   color:#fff;
-  font-size:11px;font-weight:800;
+  font-size:14px;font-weight:800;
   letter-spacing:2px;text-transform:uppercase;
   padding:0 20px;height:100%;
   display:flex;align-items:center;
@@ -436,7 +440,7 @@ html,body{
 #ticker-inner{
   position:absolute;top:50%;
   white-space:nowrap;
-  font-size:15px;font-weight:600;
+  font-size:18px;font-weight:600;
   left:0;color:#fff;
   animation:ticker-scroll 0s linear infinite;
 }
@@ -593,7 +597,7 @@ html,body{
 </div>
 
 <script>
-var TV_VERSION = '1.5.2';
+var TV_VERSION = '1.5.4';
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
 var TV_URL     = SCRIPT_URL + '?action=getTVData';
 var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
