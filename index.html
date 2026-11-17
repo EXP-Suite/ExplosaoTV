@@ -634,14 +634,14 @@ html,body{
 </div>
 
 <script>
-var TV_VERSION = '1.6.0';
+var TV_VERSION = '1.6.1';
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
 var TV_URL     = SCRIPT_URL + '?action=getTVData';
 var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
 
 var SLIDE_DURATION  = 8000;   // ms por slide no carrossel direito
 var DESTAQUE_INTERVALO = 60000; // ms por comunicado no painel esquerdo (1 min — mas geralmente é 1 só)
-var UPDATE_INTERVAL = 60000;  // 1 min — atualização silenciosa de dados
+var UPDATE_INTERVAL = 30000;  // 30s — atualização silenciosa de dados (Bug 2 fix: reduzido de 60s)
 var RELOAD_HOUR     = 4;      // 4h da manhã — recarrega a página
 
 // ═══════════════════════════════════════════════════
@@ -1417,6 +1417,21 @@ function esconderLoader(){
     buscarDadosTV();
     buscarClima();
   }, UPDATE_INTERVAL);
+
+  // Bug 2 fix: força atualização quando a aba/TV volta ao foco
+  // Resolve caso em que o browser da TV throttle timers em background
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'visible'){
+      buscarDadosTV();
+      buscarClima();
+    }
+  });
+
+  // Bug 2 fix: recarga forçada a cada 30min para garantir dados frescos
+  // (complementa o setInterval que pode ser throttled em browsers embarcados)
+  setTimeout(function(){
+    location.reload();
+  }, 30 * 60 * 1000);
 
   // Fallback: esconde loader após 8s mesmo sem dados
   setTimeout(function(){
