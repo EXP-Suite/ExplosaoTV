@@ -275,13 +275,17 @@ html,body{
   align-items:center;justify-content:center;
   padding:60px 80px;
   opacity:0;
-  transition:opacity .6s ease;
+  transition:opacity .5s ease;
   pointer-events:none;
   background:var(--bg);
 }
 .slide.active{
   opacity:1;
   pointer-events:auto;
+}
+.slide.saindo{
+  opacity:0;
+  transition:opacity .35s ease;
 }
 .slide-label{
   font-size:14px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
@@ -340,6 +344,39 @@ html,body{
 .slide-empty{background:var(--bg);}
 .slide-empty-icon{font-size:64px;margin-bottom:12px;opacity:.15}
 .slide-empty-txt{font-size:14px;color:var(--text3);letter-spacing:2px;text-transform:uppercase}
+
+/* ── ANIMAÇÕES DE ENTRADA DOS SLIDES ──────────────────── */
+@keyframes slide-label-in{
+  from{opacity:0;transform:translateY(-14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes slide-titulo-in{
+  from{opacity:0;transform:translateX(-48px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes slide-texto-in{
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes slide-num-in{
+  from{opacity:0;transform:scale(.7)}
+  to{opacity:1;transform:scale(1)}
+}
+.slide.anim-in .slide-label{
+  animation:slide-label-in .45s cubic-bezier(.22,1,.36,1) both;
+}
+.slide.anim-in .slide-titulo{
+  animation:slide-titulo-in .55s cubic-bezier(.22,1,.36,1) .08s both;
+}
+.slide.anim-in .slide-texto{
+  animation:slide-texto-in .5s cubic-bezier(.22,1,.36,1) .22s both;
+}
+.slide.anim-in .acidentes-num{
+  animation:slide-num-in .6s cubic-bezier(.22,1,.36,1) .05s both;
+}
+.slide.anim-in .acidentes-label{
+  animation:slide-texto-in .45s cubic-bezier(.22,1,.36,1) .3s both;
+}
 
 /* Linha accent lateral */
 .slide::after{
@@ -597,7 +634,7 @@ html,body{
 </div>
 
 <script>
-var TV_VERSION = '1.5.4';
+var TV_VERSION = '1.6.0';
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
 var TV_URL     = SCRIPT_URL + '?action=getTVData';
 var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
@@ -1153,7 +1190,7 @@ function renderSlides(){
 
     if(s._acidente){
       div.innerHTML =
-        '<div class="acidentes-num" id="acidentes-num">'+diasSemAcidente+'</div>'+
+        '<div class="acidentes-num" id="acidentes-num" data-valor="'+diasSemAcidente+'">'+diasSemAcidente+'</div>'+
         '<div class="acidentes-label">DIAS SEM ACIDENTES DE TRABALHO</div>';
     } else if(s._boasvindas){
       div.classList.add('slide-boasvindas');
@@ -1229,9 +1266,11 @@ function _tipoLabel(tipo){
 }
 
 function iniciarCarrossel(total){
-  if(total<=1) return;
+  // Anima o primeiro slide imediatamente
+  mostrarSlide(0, total);
   progressStart = Date.now();
   animarProgress(SLIDE_DURATION);
+  if(total<=1) return;
   slideTimer = setInterval(function(){
     slideIdx = (slideIdx+1) % total;
     mostrarSlide(slideIdx, total);
@@ -1242,9 +1281,46 @@ function iniciarCarrossel(total){
 
 function mostrarSlide(idx, total){
   var slides = document.querySelectorAll('#slides-area .slide');
-  slides.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
-  var dots = document.querySelectorAll('.dot');
-  dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+  // Fade-out no slide atual
+  var atual = document.querySelector('#slides-area .slide.active');
+  if(atual){ atual.classList.add('saindo'); }
+  setTimeout(function(){
+    slides.forEach(function(s,i){
+      s.classList.remove('active','saindo','anim-in');
+      if(i===idx){
+        s.classList.add('active');
+        // Dispara animação de entrada
+        requestAnimationFrame(function(){
+          requestAnimationFrame(function(){
+            s.classList.add('anim-in');
+            // Contagem animada nos slides de acidentes
+            var numEl = s.querySelector('.acidentes-num');
+            if(numEl){
+              var alvo = parseInt(numEl.dataset.valor||numEl.textContent)||0;
+              animarContagem(numEl, alvo);
+            }
+          });
+        });
+      }
+    });
+    var dots = document.querySelectorAll('.dot');
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+  }, 350);
+}
+
+function animarContagem(el, alvo){
+  var duracao = Math.min(1800, 400 + alvo * 18);
+  var inicio = Date.now();
+  var frame = function(){
+    var t = Math.min(1, (Date.now()-inicio)/duracao);
+    // ease-out
+    var v = Math.round(alvo * (1 - Math.pow(1-t, 3)));
+    el.textContent = v;
+    if(t < 1) requestAnimationFrame(frame);
+    else el.textContent = alvo;
+  };
+  el.textContent = '0';
+  requestAnimationFrame(frame);
 }
 
 function animarProgress(duracao){
