@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1280, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Explosão TV v1.6.5</title>
+<title>Explosão TV v1.6.6</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -144,12 +144,10 @@ html,body{
   overflow:hidden;
   text-align:center;
 }
-#esq-acidentes::before{
-  content:'🦺';
-  position:absolute;right:18px;top:50%;transform:translateY(-50%);
-  font-size:72px;opacity:.50;
-  line-height:1;
-  z-index:1;
+#esq-acidentes-icon{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:80px;height:80px;opacity:.55;
+  z-index:1;pointer-events:none;
 }
 #esq-acident-num{
   font-size:84px;font-weight:900;line-height:1;
@@ -542,7 +540,7 @@ html,body{
 </div>
 
 <div id="offline-badge">📡 Sem conexão</div>
-<div id="tv-version">Explosão TV v1.6.5</div>
+<div id="tv-version">Explosão TV v1.6.6</div>
 
 <!-- Elementos ocultos mantidos para compatibilidade com JS -->
 <div id="header" style="display:none!important">
@@ -588,6 +586,16 @@ html,body{
 
     <!-- Dias sem acidentes -->
     <div id="esq-acidentes">
+      <!-- Ícone SVG colete de segurança (sem emoji, compatível com TV LED) -->
+      <svg id="esq-acidentes-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <!-- Colete: corpo principal -->
+        <path d="M18 30 L50 18 L82 30 L78 80 H58 L50 60 L42 80 H22 Z" fill="#047857" stroke="#065F46" stroke-width="2"/>
+        <!-- Faixas refletivas horizontais -->
+        <rect x="22" y="50" width="56" height="7" rx="2" fill="#FCD34D" opacity=".95"/>
+        <rect x="22" y="62" width="56" height="7" rx="2" fill="#FCD34D" opacity=".95"/>
+        <!-- Abertura central (pescoço/fechamento) -->
+        <path d="M42 18 L50 38 L58 18" fill="#A7F3D0" stroke="#065F46" stroke-width="1.5"/>
+      </svg>
       <div id="esq-acident-num">0</div>
       <div id="esq-acident-label">Dias sem Acidentes</div>
       <div id="esq-acident-sub">de trabalho com afastamento</div>
@@ -638,7 +646,7 @@ html,body{
 </div>
 
 <script>
-var TV_VERSION = '1.6.5';
+var TV_VERSION = '1.6.6';
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxT9WoWdpJlejCsvA-tA5lUWROPXx1UiOfPlEF8R0FOSDk0QrF7FqX4-RC75y9X2Igh6A/exec';
 var TV_URL     = SCRIPT_URL + '?action=getTVData';
 var WEATHER_URL= 'https://api.open-meteo.com/v1/forecast?latitude=-16.6834&longitude=-49.4967&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=America%2FSao_Paulo&forecast_days=1';
